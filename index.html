@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Manrope',sans-serif;background:#07100b;color:#eef2ec;-webkit-font-smoothing:antialiased;}
+  a{color:#7CE7A6;text-decoration:none;} a:hover{color:#a8f0c6;}
+  ::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px;}
+  @keyframes scr{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.35;}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;background:radial-gradient(1100px 640px at 26% -8%, #14271c 0%, #0a110c 52%, #07100b 100%);">
+
+  <aside style="width:298px;flex-shrink:0;border-right:1px solid rgba(255,255,255,0.07);padding:26px 20px;display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;overflow:auto;background:rgba(8,14,10,0.55);backdrop-filter:blur(10px);">
+    <div>
+      <div style="display:flex;align-items:baseline;gap:8px;">
+        <span style="font-family:'Space Grotesk';font-weight:700;font-size:23px;letter-spacing:-.01em;">TAM30</span>
+        <span style="font-size:10px;font-weight:700;letter-spacing:.34em;color:#7CE7A6;">WELLNESS</span>
+      </div>
+      <div style="font-size:12px;color:#7c8a80;margin-top:6px;line-height:1.5;">İnteraktif prototip · MVP Faz 1<br>Self-servis reformer pilates otomasyonu</div>
+    </div>
+
+    <div style="display:flex;gap:5px;background:#111a14;border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:5px;">
+      <sc-for list="{{ roleTabs }}" as="tab" hint-placeholder-count="3">
+        <div style="{{ tab.style }}" onClick="{{ tab.go }}">{{ tab.label }}</div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:.2em;color:#5c6a60;padding:0 12px 8px;">EKRANLAR</div>
+      <sc-for list="{{ nav }}" as="item" hint-placeholder-count="9">
+        <div style="{{ item.rowStyle }}" onClick="{{ item.go }}">
+          <span style="{{ item.numStyle }}">{{ item.num }}</span>
+          <span style="{{ item.labelStyle }}">{{ item.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:auto;font-size:11px;color:#59645b;line-height:1.6;border-top:1px solid rgba(255,255,255,.06);padding-top:16px;">
+      Ajans çalışması · Ekranlar arasında geçiş için tıklayın. Cihaz içindeki butonlar gerçek akışı yürütür.
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 34px;border-bottom:1px solid rgba(255,255,255,.05);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-family:'Space Grotesk';font-weight:600;font-size:13px;color:#7CE7A6;background:rgba(124,231,166,.1);border:1px solid rgba(124,231,166,.28);padding:5px 11px;border-radius:8px;">{{ curNum }} / {{ screenCount }}</span>
+        <span style="font-family:'Space Grotesk';font-weight:600;font-size:17px;">{{ curLabel }}</span>
+      </div>
+      <div style="font-size:12px;color:#7c8a80;">{{ roleLabel }} akışı</div>
+    </div>
+
+    <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px;overflow:auto;">
+
+      <sc-if value="{{ isPhone }}" hint-placeholder-val="{{ true }}">
+        <div style="width:392px;flex-shrink:0;">
+          <div style="border-radius:48px;padding:11px;background:linear-gradient(160deg,#26302880,#0b100d);box-shadow:0 46px 100px -34px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.05), inset 0 1px 0 rgba(255,255,255,.06);">
+            <div style="position:relative;border-radius:38px;overflow:hidden;background:#0d130f;height:816px;display:flex;flex-direction:column;">
+              <div style="height:46px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-family:'Space Grotesk';font-weight:600;font-size:13.5px;z-index:5;">
+                <span>9:41</span>
+                <span style="display:flex;align-items:center;gap:7px;">
+                  <span style="font-size:10.5px;letter-spacing:.05em;">5G</span>
+                  <span style="width:22px;height:11px;border:1.4px solid rgba(255,255,255,.55);border-radius:3px;position:relative;display:inline-block;">
+                    <span style="position:absolute;top:1.5px;left:1.5px;bottom:1.5px;width:72%;background:#7CE7A6;border-radius:1px;"></span>
+                  </span>
+                </span>
+              </div>
+
+              <div ref="{{ setScroll }}" style="flex:1;overflow-y:auto;overflow-x:hidden;">
+
+                <sc-if value="{{ is_m_login }}" hint-placeholder-val="{{ true }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;padding:0 26px 34px;background:radial-gradient(420px 320px at 50% 8%, rgba(124,231,166,.09), transparent 70%);">
+                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding-top:40px;">
+                      <div style="width:74px;height:74px;border-radius:22px;background:linear-gradient(150deg,#7CE7A6,#3aa46b);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:30px;color:#062718;box-shadow:0 18px 40px -14px rgba(124,231,166,.6);">T</div>
+                      <div style="font-family:'Space Grotesk';font-weight:700;font-size:34px;margin-top:22px;letter-spacing:-.02em;">TAM30</div>
+                      <div style="font-size:11px;font-weight:700;letter-spacing:.42em;color:#7CE7A6;">WELLNESS</div>
+                      <div style="font-size:14.5px;color:#95a399;margin-top:16px;max-width:250px;line-height:1.55;">Self-servis reformer pilates. Kaydol, kredini yükle, QR ile gir — gerisi otomatik.</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:11px;">
+                      <button onClick="{{ go_m_signup }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Üye Ol</button>
+                      <button onClick="{{ go_m_home }}" style="width:100%;padding:16px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#eef2ec;font-family:'Space Grotesk';font-weight:600;font-size:15px;cursor:pointer;">Giriş Yap</button>
+                      <div style="text-align:center;font-size:11.5px;color:#6b776d;margin-top:6px;">Stüdyoya özel erişim · İyzico güvenli ödeme</div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_signup }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_login }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Hesap Oluştur</div><div style="font-size:11.5px;color:#8a978c;">Adım 1 / 6 · Kişisel bilgiler</div></div>
+                    </div>
+                    <div style="height:3px;background:rgba(255,255,255,.07);margin:4px 24px 18px;border-radius:3px;"><div style="width:16%;height:100%;background:#7CE7A6;border-radius:3px;"></div></div>
+                    <div style="padding:0 24px 24px;display:flex;flex-direction:column;gap:14px;">
+                      <div style="display:flex;gap:12px;">
+                        <div style="flex:1;"><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">Ad</label><input value="Deniz" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                        <div style="flex:1;"><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">Soyad</label><input value="Arslan" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      </div>
+                      <div><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">Doğum tarihi</label><input value="14.03.1991" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      <div><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">Telefon</label><input value="+90 5__ ___ __ __" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      <div><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">E-posta</label><input value="deniz@ornek.com" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      <div style="font-size:11.5px;color:#6b776d;line-height:1.5;display:flex;gap:8px;align-items:flex-start;"><span style="color:#7CE7A6;">ⓘ</span> Üyelik yalnızca 18–70 yaş arası ve en az 1 yıl reformer deneyimli bireyler içindir.</div>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ go_m_otp }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Devam</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_otp }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_signup }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Telefon Doğrulama</div><div style="font-size:11.5px;color:#8a978c;">Adım 2 / 6</div></div>
+                    </div>
+                    <div style="height:3px;background:rgba(255,255,255,.07);margin:4px 24px 18px;border-radius:3px;"><div style="width:33%;height:100%;background:#7CE7A6;border-radius:3px;"></div></div>
+                    <div style="padding:16px 24px;text-align:center;">
+                      <div style="font-size:14.5px;color:#95a399;line-height:1.55;margin-bottom:28px;">+90 5** *** ** ** numarasına gönderilen<br>4 haneli kodu gir.</div>
+                      <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;">
+                        <div style="width:58px;height:66px;border-radius:15px;border:1px solid #7CE7A6;background:rgba(124,231,166,.06);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:26px;">4</div>
+                        <div style="width:58px;height:66px;border-radius:15px;border:1px solid #7CE7A6;background:rgba(124,231,166,.06);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:26px;">8</div>
+                        <div style="width:58px;height:66px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:#0f1512;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:26px;color:#59645b;">—</div>
+                        <div style="width:58px;height:66px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:#0f1512;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:26px;color:#59645b;">—</div>
+                      </div>
+                      <div style="font-size:12.5px;color:#6b776d;">Kodu almadın mı? <span style="color:#7CE7A6;font-weight:600;">Tekrar gönder (0:24)</span></div>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ go_m_health }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Doğrula</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_health }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_otp }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Sağlık & Ön Koşul Formu</div><div style="font-size:11.5px;color:#8a978c;">Adım 3 / 6</div></div>
+                    </div>
+                    <div style="height:3px;background:rgba(255,255,255,.07);margin:4px 24px 18px;border-radius:3px;"><div style="width:50%;height:100%;background:#7CE7A6;border-radius:3px;"></div></div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:10px;">
+                      <div style="background:rgba(240,128,110,.08);border:1px solid rgba(240,128,110,.3);border-radius:14px;padding:13px 15px;font-size:12px;color:#f2a99b;line-height:1.5;">Yanlış sağlık beyanı üyeliğin derhal iptaline ve kredi iadesinin yapılmamasına yol açar.</div>
+                      <sc-for list="{{ healthItems }}" as="hi" hint-placeholder-count="5">
+                        <div style="{{ hi.style }}"><span style="font-size:13.5px;font-weight:500;">{{ hi.label }}</span><span style="{{ hi.badgeStyle }}">{{ hi.badge }}</span></div>
+                      </sc-for>
+                    </div>
+                    <div style="padding:0 24px;">
+                      <div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:9px;">Sonucu önizle</div>
+                      <div style="display:flex;gap:6px;background:#111a14;border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:5px;">
+                        <sc-for list="{{ eligTabs }}" as="et" hint-placeholder-count="2">
+                          <div style="{{ et.style }}" onClick="{{ et.go }}">{{ et.label }}</div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="margin-top:auto;padding:16px 24px 24px;"><button onClick="{{ go_m_eligibility }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Değerlendir</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_eligibility }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <sc-if value="{{ eligible }}">
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px;gap:8px;">
+                        <div style="width:88px;height:88px;border-radius:50%;background:rgba(124,231,166,.12);border:1px solid rgba(124,231,166,.4);display:flex;align-items:center;justify-content:center;font-size:42px;color:#7CE7A6;">✓</div>
+                        <div style="font-family:'Space Grotesk';font-weight:700;font-size:24px;margin-top:16px;">Uygunsun!</div>
+                        <div style="font-size:14px;color:#95a399;line-height:1.55;max-width:260px;">Tüm ön koşulları karşılıyorsun. Paket seçimiyle üyeliğini başlatabilirsin.</div>
+                        <div style="width:100%;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;margin-top:22px;text-align:left;display:flex;flex-direction:column;gap:10px;">
+                          <sc-for list="{{ eligOk }}" as="e" hint-placeholder-count="4">
+                            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="color:#7CE7A6;">✓</span><span style="color:#c3cec6;">{{ e }}</span></div>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div style="padding:16px 24px 24px;"><button onClick="{{ go_m_consent }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Devam</button></div>
+                    </sc-if>
+                    <sc-if value="{{ notEligible }}">
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px;gap:8px;">
+                        <div style="width:88px;height:88px;border-radius:50%;background:rgba(240,128,110,.12);border:1px solid rgba(240,128,110,.4);display:flex;align-items:center;justify-content:center;font-size:40px;color:#f0806e;">!</div>
+                        <div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;margin-top:16px;">Üyelik başlatılamıyor</div>
+                        <div style="font-size:14px;color:#95a399;line-height:1.55;max-width:270px;">Beyan edilen bilgiler ön koşulları karşılamıyor. Başvuru sistem tarafından otomatik reddedildi.</div>
+                        <div style="width:100%;background:rgba(240,128,110,.06);border:1px solid rgba(240,128,110,.22);border-radius:18px;padding:16px;margin-top:22px;text-align:left;display:flex;flex-direction:column;gap:10px;">
+                          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="color:#f0806e;">✕</span><span style="color:#f2a99b;">Kalp rahatsızlığı beyanı — üyelik açılamaz</span></div>
+                          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="color:#6b776d;">✓</span><span style="color:#7c8a80;">Yaş aralığı uygun (18–70)</span></div>
+                          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="color:#6b776d;">✓</span><span style="color:#7c8a80;">Reformer deneyimi ≥ 1 yıl</span></div>
+                        </div>
+                      </div>
+                      <div style="padding:16px 24px 24px;"><button onClick="{{ go_m_health }}" style="width:100%;padding:16px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#eef2ec;font-family:'Space Grotesk';font-weight:600;font-size:15px;cursor:pointer;">Formu düzenle</button></div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_consent }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_eligibility }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Sözleşme & KVKK</div><div style="font-size:11.5px;color:#8a978c;">Adım 4 / 6</div></div>
+                    </div>
+                    <div style="height:3px;background:rgba(255,255,255,.07);margin:4px 24px 18px;border-radius:3px;"><div style="width:66%;height:100%;background:#7CE7A6;border-radius:3px;"></div></div>
+                    <div style="padding:0 24px;">
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;font-size:12.5px;color:#95a399;line-height:1.7;max-height:230px;overflow:auto;">
+                        <b style="color:#c3cec6;">Üyelik Sözleşmesi Özeti</b><br>
+                        • Stüdyo tamamen self-servistir; içeride personel bulunmaz.<br>
+                        • Giriş/çıkış QR ile yapılır, tüm seanslar otomatik kayıt altına alınır.<br>
+                        • Kamera sistemi seans boyunca kişi sayısını izler (güvenlik amaçlı).<br>
+                        • İhlaller otomatik yaptırıma tabidir (ek ücret / askı / iptal).<br>
+                        • Sağlık verisi ve kamera kaydı KVKK kapsamında işlenir.
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+                        <sc-for list="{{ consents }}" as="c" hint-placeholder-count="3">
+                          <div style="display:flex;align-items:center;gap:12px;background:rgba(124,231,166,.05);border:1px solid rgba(124,231,166,.2);border-radius:13px;padding:13px 14px;">
+                            <span style="width:22px;height:22px;border-radius:7px;background:#7CE7A6;color:#062718;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;">✓</span>
+                            <span style="font-size:12.5px;color:#c3cec6;line-height:1.4;">{{ c }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="margin-top:auto;padding:16px 24px 24px;"><button onClick="{{ go_m_package }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Onayla ve Devam</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_package }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_consent }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Paket Seçimi</div><div style="font-size:11.5px;color:#8a978c;">Adım 5 / 6 · Deneyim seç</div></div>
+                    </div>
+                    <div style="height:3px;background:rgba(255,255,255,.07);margin:4px 24px 16px;border-radius:3px;"><div style="width:83%;height:100%;background:#7CE7A6;border-radius:3px;"></div></div>
+                    <div style="padding:0 24px 8px;">
+                      <div style="display:flex;gap:6px;background:#111a14;border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:5px;">
+                        <sc-for list="{{ modeTabs }}" as="mt" hint-placeholder-count="2">
+                          <div style="{{ mt.style }}" onClick="{{ mt.go }}">{{ mt.label }}</div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="padding:12px 24px 20px;display:flex;flex-direction:column;gap:11px;">
+                      <sc-for list="{{ packages }}" as="p" hint-placeholder-count="5">
+                        <div style="{{ p.cardStyle }}" onClick="{{ p.go }}">
+                          <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                              <span style="width:10px;height:10px;border-radius:50%;background:{{ p.dot }};box-shadow:0 0 10px {{ p.dot }};"></span>
+                              <div><div style="font-family:'Space Grotesk';font-weight:700;font-size:15px;">{{ p.name }}</div><div style="font-size:11.5px;color:#8a978c;">{{ p.tag }} · {{ p.sessions }}</div></div>
+                            </div>
+                            <div style="text-align:right;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:16px;">{{ p.price }}</div><span style="{{ p.checkStyle }}">✓</span></div>
+                          </div>
+                          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;">
+                            <sc-for list="{{ p.feats }}" as="f" hint-placeholder-count="2">
+                              <span style="font-size:11px;color:#9aa89c;background:rgba(255,255,255,.05);border-radius:7px;padding:4px 9px;">{{ f }}</span>
+                            </sc-for>
+                          </div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ go_m_payment }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Devam · Ödeme</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_payment }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_package }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Ödeme</div><div style="font-size:11.5px;color:#8a978c;">Adım 6 / 6 · İyzico güvenli</div></div>
+                    </div>
+                    <div style="height:3px;background:rgba(255,255,255,.07);margin:4px 24px 18px;border-radius:3px;"><div style="width:100%;height:100%;background:#7CE7A6;border-radius:3px;"></div></div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:14px;">
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#95a399;margin-bottom:8px;"><span>{{ selPkgName }}</span><span style="color:#eef2ec;">{{ selPkgPrice }}</span></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#95a399;margin-bottom:8px;"><span>KDV (%20)</span><span style="color:#eef2ec;">dahil</span></div>
+                        <div style="border-top:1px solid rgba(255,255,255,.08);margin-top:6px;padding-top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:600;">Toplam</span><span style="font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#7CE7A6;">{{ selPkgPrice }}</span></div>
+                      </div>
+                      <div><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">Kart üzerindeki isim</label><input value="Deniz Arslan" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      <div><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">Kart numarası</label><input value="5528 •••• •••• 4417" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      <div style="display:flex;gap:12px;">
+                        <div style="flex:1;"><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">SKT</label><input value="09/28" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                        <div style="flex:1;"><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:7px;display:block;">CVC</label><input value="•••" style="width:100%;padding:14px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#0f1512;color:#eef2ec;font-size:14.5px;font-family:'Manrope';outline:none;"></div>
+                      </div>
+                      <div style="font-size:11.5px;color:#6b776d;display:flex;align-items:center;gap:7px;"><span style="color:#7CE7A6;">🔒</span> 3 ve 6 aylık taksit seçenekleri İyzico ekranında sunulur.</div>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ go_m_welcome }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">{{ selPkgPrice }} · Güvenli Öde</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_welcome }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px 30px;background:radial-gradient(420px 320px at 50% 20%, rgba(124,231,166,.1), transparent 70%);">
+                    <div style="width:70px;height:70px;border-radius:50%;background:rgba(124,231,166,.12);border:1px solid rgba(124,231,166,.4);display:flex;align-items:center;justify-content:center;font-size:34px;color:#7CE7A6;margin-bottom:8px;">✓</div>
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:24px;">Üyeliğin aktif!</div>
+                    <div style="font-size:14px;color:#95a399;margin:8px 0 22px;">Bu QR kod stüdyo kapını açar.</div>
+                    <div style="background:#fff;border-radius:22px;padding:18px;box-shadow:0 20px 50px -20px rgba(0,0,0,.6);">
+                      <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:2px;width:190px;height:190px;">
+                        <sc-for list="{{ qr }}" as="q" hint-placeholder-count="60"><span style="{{ q.style }}"></span></sc-for>
+                      </div>
+                    </div>
+                    <div style="font-family:'Space Grotesk';font-weight:600;font-size:13px;color:#95a399;margin-top:16px;letter-spacing:.1em;">ÜYE #TAM-4417 · SIGNATURE</div>
+                    <button onClick="{{ go_m_home }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;margin-top:26px;">Ana ekrana git</button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_home }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="padding:10px 24px 6px;display:flex;align-items:center;justify-content:space-between;">
+                      <div><div style="font-size:12.5px;color:#8a978c;">İyi günler,</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:21px;">Deniz 👋</div></div>
+                      <div style="display:flex;gap:10px;">
+                        <span style="width:42px;height:42px;border-radius:13px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:17px;">🔔</span>
+                        <span style="width:42px;height:42px;border-radius:13px;background:linear-gradient(150deg,#7CE7A6,#3aa46b);color:#062718;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;">DA</span>
+                      </div>
+                    </div>
+                    <div style="padding:8px 24px 20px;display:flex;flex-direction:column;gap:13px;">
+                      <div style="background:linear-gradient(150deg,#173226,#101711);border:1px solid rgba(124,231,166,.22);border-radius:20px;padding:19px;position:relative;overflow:hidden;">
+                        <div style="position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(124,231,166,.22),transparent 70%);"></div>
+                        <div style="font-size:12px;color:#95a399;">Kredi bakiyen</div>
+                        <div style="font-family:'Space Grotesk';font-weight:700;font-size:33px;margin:3px 0 6px;">₺18.400</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;">
+                          <span style="font-size:11.5px;color:#7CE7A6;font-weight:600;background:rgba(124,231,166,.12);padding:4px 10px;border-radius:8px;">Signature · Sınırsız</span>
+                          <span style="font-size:11px;color:#7c8a80;">5.000 TL altında uyarı alırsın</span>
+                        </div>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><span style="font-size:12px;font-weight:600;color:#8a978c;">SIRADAKİ SEANS</span><span style="font-size:11px;color:#7CE7A6;">Bugün</span></div>
+                        <div style="display:flex;align-items:center;gap:13px;">
+                          <div style="width:52px;height:52px;border-radius:14px;background:rgba(124,231,166,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:'Space Grotesk';font-weight:700;font-size:17px;color:#7CE7A6;">18</span><span style="font-size:9px;color:#7CE7A6;">:30</span></div>
+                          <div style="flex:1;"><div style="font-weight:600;font-size:14.5px;">Reformer Seansı</div><div style="font-size:12px;color:#8a978c;">Eğitmen: Elif K. · 1 saat</div></div>
+                          <button onClick="{{ go_m_qr }}" style="padding:11px 15px;border-radius:12px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:12.5px;cursor:pointer;">QR</button>
+                        </div>
+                      </div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;">
+                        <div onClick="{{ go_m_reserve }}" style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;cursor:pointer;"><div style="font-size:22px;margin-bottom:8px;">📅</div><div style="font-weight:600;font-size:13.5px;">Rezervasyon</div><div style="font-size:11px;color:#8a978c;">Slot & eğitmen seç</div></div>
+                        <div onClick="{{ go_m_rewards }}" style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;cursor:pointer;"><div style="font-size:22px;margin-bottom:8px;">🏆</div><div style="font-weight:600;font-size:13.5px;">Ödüller</div><div style="font-size:11px;color:#8a978c;">1.240 puan</div></div>
+                        <div onClick="{{ go_m_wallet }}" style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;cursor:pointer;"><div style="font-size:22px;margin-bottom:8px;">💳</div><div style="font-weight:600;font-size:13.5px;">Cüzdan</div><div style="font-size:11px;color:#8a978c;">Kredi & dondurma</div></div>
+                        <div onClick="{{ go_m_session }}" style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;cursor:pointer;"><div style="font-size:22px;margin-bottom:8px;">⏱️</div><div style="font-weight:600;font-size:13.5px;">Aktif Seans</div><div style="font-size:11px;color:#8a978c;">Canlı sayaç</div></div>
+                      </div>
+                      <div style="background:rgba(230,197,131,.07);border:1px solid rgba(230,197,131,.22);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:22px;">🔥</span>
+                        <div style="flex:1;"><div style="font-weight:600;font-size:13.5px;color:#e6c583;">4 hafta streak</div><div style="font-size:11.5px;color:#95a399;">Bu hafta 2 seans daha = bonus puan</div></div>
+                      </div>
+                    </div>
+                    <div style="margin-top:auto;display:flex;justify-content:space-around;align-items:center;padding:12px 14px 20px;border-top:1px solid rgba(255,255,255,.06);background:rgba(9,14,11,.7);backdrop-filter:blur(10px);position:sticky;bottom:0;">
+                      <div onClick="{{ go_m_home }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:#7CE7A6;"><span style="font-size:19px;">⌂</span><span style="font-size:10px;font-weight:600;">Ana</span></div>
+                      <div onClick="{{ go_m_reserve }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:#7c8a80;"><span style="font-size:19px;">📅</span><span style="font-size:10px;">Rezerve</span></div>
+                      <div onClick="{{ go_m_qr }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;margin-top:-16px;"><span style="width:52px;height:52px;border-radius:50%;background:#7CE7A6;color:#062718;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 10px 24px -8px rgba(124,231,166,.7);">⧉</span></div>
+                      <div onClick="{{ go_m_rewards }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:#7c8a80;"><span style="font-size:19px;">🏆</span><span style="font-size:10px;">Ödül</span></div>
+                      <div onClick="{{ go_m_wallet }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:#7c8a80;"><span style="font-size:19px;">☰</span><span style="font-size:10px;">Cüzdan</span></div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_reserve }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 12px;">
+                      <button onClick="{{ go_m_home }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Rezervasyon</div><div style="font-size:11.5px;color:#8a978c;">Müsait slotlar anlık</div></div>
+                    </div>
+                    <div style="padding:0 24px 8px;">
+                      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;">
+                        <sc-for list="{{ days }}" as="d" hint-placeholder-count="6"><div style="{{ d.style }}"><span style="font-size:10.5px;">{{ d.dow }}</span><span style="font-family:'Space Grotesk';font-weight:700;font-size:16px;">{{ d.num }}</span></div></sc-for>
+                      </div>
+                    </div>
+                    <div style="padding:12px 24px 8px;"><div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:12px;">MÜSAİT SAATLER · Salı 15 Tem</div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <sc-for list="{{ slots }}" as="s" hint-placeholder-count="6">
+                          <div style="{{ s.style }}" onClick="{{ s.go }}"><div style="font-family:'Space Grotesk';font-weight:700;font-size:16px;">{{ s.time }}</div><div style="font-size:11px;{{ s.capColor }}">{{ s.cap }}</div></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="padding:14px 24px;">
+                      <div onClick="{{ toggleTrainer }}" style="display:flex;align-items:center;justify-content:space-between;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:15px 16px;cursor:pointer;">
+                        <div><div style="font-weight:600;font-size:14px;">Eğitmen ekle</div><div style="font-size:11.5px;color:#8a978c;">Opsiyonel · %70 eğitmene ödenir</div></div>
+                        <span style="{{ switchStyle }}"><span style="{{ switchKnob }}"></span></span>
+                      </div>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ reserveNext }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">{{ reserveCta }}</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_trainerpick }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 10px;">
+                      <button onClick="{{ go_m_reserve }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Eğitmen Seç</div><div style="font-size:11.5px;color:#8a978c;">Bağımsız eğitmenler · Salı 18:30</div></div>
+                    </div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:11px;">
+                      <sc-for list="{{ trainers }}" as="t" hint-placeholder-count="3">
+                        <div style="{{ t.cardStyle }}" onClick="{{ t.go }}">
+                          <div style="display:flex;align-items:center;gap:13px;">
+                            <span style="width:50px;height:50px;border-radius:15px;background:linear-gradient(150deg,#2a3a30,#18211c);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;color:#7CE7A6;">{{ t.init }}</span>
+                            <div style="flex:1;"><div style="font-weight:600;font-size:14.5px;">{{ t.name }}</div><div style="font-size:11.5px;color:#8a978c;">{{ t.spec }}</div></div>
+                            <div style="text-align:right;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:14px;">{{ t.price }}</div><div style="font-size:11px;color:#e6c583;">★ {{ t.rating }}</div></div>
+                          </div>
+                          <div style="font-size:11px;color:#7c8a80;margin-top:11px;border-top:1px solid rgba(255,255,255,.06);padding-top:10px;">Müsait: {{ t.avail }}</div>
+                        </div>
+                      </sc-for>
+                      <div style="font-size:11px;color:#6b776d;text-align:center;line-height:1.5;">Platform %30 komisyon alır · eğitmene %70 ödenir. Ödeme İyzico üzerinden.</div>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ go_m_reserved }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Rezervasyonu Onayla</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_reserved }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px 30px;">
+                    <div style="width:80px;height:80px;border-radius:50%;background:rgba(124,231,166,.12);border:1px solid rgba(124,231,166,.4);display:flex;align-items:center;justify-content:center;font-size:38px;color:#7CE7A6;">✓</div>
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:23px;margin-top:18px;">Rezervasyon onaylandı</div>
+                    <div style="width:100%;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:18px;margin-top:22px;text-align:left;display:flex;flex-direction:column;gap:12px;">
+                      <div style="display:flex;justify-content:space-between;font-size:13.5px;"><span style="color:#8a978c;">Tarih & saat</span><span style="font-weight:600;">Salı 15 Tem · 18:30</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:13.5px;"><span style="color:#8a978c;">Reformer</span><span style="font-weight:600;">Makine #3</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:13.5px;"><span style="color:#8a978c;">Eğitmen</span><span style="font-weight:600;">Elif Kaya</span></div>
+                      <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:12px;font-size:12px;color:#7CE7A6;">✓ Bildirim gönderildi · Push + E-posta</div>
+                      <div style="font-size:12px;color:#95a399;">1 saat önce hatırlatma (Push + SMS) alacaksın.</div>
+                    </div>
+                    <div style="width:100%;display:flex;flex-direction:column;gap:11px;margin-top:24px;">
+                      <button onClick="{{ go_m_qr }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">QR'ı Göster</button>
+                      <button onClick="{{ go_m_home }}" style="width:100%;padding:15px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#eef2ec;font-family:'Space Grotesk';font-weight:600;font-size:14px;cursor:pointer;">Ana ekrana dön</button>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_qr }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 8px;">
+                      <button onClick="{{ go_m_home }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Stüdyo Girişi</div><div style="font-size:11.5px;color:#8a978c;">Kapı QR okuyucusuna okut</div></div>
+                    </div>
+                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 30px;">
+                      <div style="background:#fff;border-radius:24px;padding:20px;box-shadow:0 20px 50px -20px rgba(0,0,0,.6);">
+                        <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:2px;width:210px;height:210px;">
+                          <sc-for list="{{ qr }}" as="q" hint-placeholder-count="60"><span style="{{ q.style }}"></span></sc-for>
+                        </div>
+                      </div>
+                      <div style="font-family:'Space Grotesk';font-weight:600;font-size:13px;color:#95a399;margin-top:18px;letter-spacing:.08em;">ÜYE #TAM-4417</div>
+                      <div style="display:flex;flex-direction:column;gap:9px;width:100%;margin-top:22px;">
+                        <div style="display:flex;align-items:center;gap:9px;background:rgba(124,231,166,.07);border:1px solid rgba(124,231,166,.2);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7CE7A6;"><span>●</span> 06:00 – 00:00 arası aktif</div>
+                        <div style="display:flex;align-items:center;gap:9px;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#95a399;">⏱ Rezervasyon 18:30 · geçerlilik 20 dk</div>
+                      </div>
+                    </div>
+                    <div style="padding:14px 24px 24px;"><button onClick="{{ go_m_session }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Kapıyı Aç (demo)</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_session }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="padding:14px 24px 4px;text-align:center;"><div style="font-size:12px;color:#7CE7A6;font-weight:600;letter-spacing:.05em;">● SEANS AKTİF</div></div>
+                    <div style="display:flex;flex-direction:column;align-items:center;padding:18px 24px 8px;">
+                      <div style="width:210px;height:210px;border-radius:50%;background:conic-gradient(#7CE7A6 0% 70%, rgba(255,255,255,.06) 70% 100%);display:flex;align-items:center;justify-content:center;">
+                        <div style="width:172px;height:172px;border-radius:50%;background:#0d130f;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                          <div style="font-family:'Space Grotesk';font-weight:700;font-size:40px;">42:18</div>
+                          <div style="font-size:12px;color:#8a978c;margin-top:2px;">kalan süre</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="padding:12px 24px;display:flex;flex-direction:column;gap:11px;">
+                      <div style="display:flex;align-items:center;justify-content:space-between;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:15px 16px;">
+                        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:22px;">🏋️</span><div><div style="font-weight:600;font-size:14px;">Reformer #3</div><div style="font-size:11.5px;color:#7CE7A6;">Aktif · makine QR okutuldu</div></div></div>
+                        <span style="width:9px;height:9px;border-radius:50%;background:#7CE7A6;animation:pulseDot 1.6s infinite;"></span>
+                      </div>
+                      <div style="display:flex;align-items:center;justify-content:space-between;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:15px 16px;">
+                        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:22px;">📹</span><div><div style="font-weight:600;font-size:14px;">2 / 2 kişi</div><div style="font-size:11.5px;color:#8a978c;">Kamera kişi sayısını izliyor</div></div></div>
+                        <span style="font-size:11px;color:#7CE7A6;">Uygun</span>
+                      </div>
+                      <div style="background:rgba(230,197,131,.08);border:1px solid rgba(230,197,131,.28);border-radius:15px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:22px;">⏰</span><div style="flex:1;"><div style="font-weight:600;font-size:13.5px;color:#e6c583;">55. dakika hatırlatması</div><div style="font-size:11.5px;color:#95a399;">"5 dakikan kaldı, çıkışı unutma."</div></div>
+                      </div>
+                    </div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button onClick="{{ go_m_home }}" style="width:100%;padding:16px;border-radius:15px;border:none;background:#f0806e;color:#2a0f0a;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Çıkış QR'ı Okut · Seansı Bitir</button><div style="text-align:center;font-size:11px;color:#6b776d;margin-top:10px;">Çıkışta ücret otomatik düşülür. Okutulmazsa seans kapanmaz.</div></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_rewards }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 12px;">
+                      <button onClick="{{ go_m_home }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Ödül & Motivasyon</div></div>
+                    </div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:13px;">
+                      <div style="background:linear-gradient(150deg,#2a2312,#141712);border:1px solid rgba(230,197,131,.28);border-radius:20px;padding:19px;text-align:center;">
+                        <div style="font-size:12px;color:#e6c583;">Toplam puanın</div>
+                        <div style="font-family:'Space Grotesk';font-weight:700;font-size:38px;color:#e6c583;">1.240</div>
+                        <div style="display:flex;gap:6px;justify-content:center;margin-top:12px;">
+                          <sc-for list="{{ streak }}" as="d" hint-placeholder-count="7"><span style="{{ d.style }}"></span></sc-for>
+                        </div>
+                        <div style="font-size:11.5px;color:#95a399;margin-top:10px;">4 hafta streak · bu hafta 2 seans daha = bonus</div>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:12px;">PUAN KAZANMA</div>
+                        <div style="display:flex;flex-direction:column;gap:11px;">
+                          <sc-for list="{{ pointsList }}" as="p" hint-placeholder-count="4">
+                            <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;color:#c3cec6;">{{ p.act }}</span><span style="font-size:12px;font-weight:600;color:#7CE7A6;">{{ p.pts }}</span></div>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;color:#8a978c;">HACİM İNDİRİMİ</span><span style="font-size:11.5px;color:#7CE7A6;">₺18.400 harcandı</span></div>
+                        <div style="font-size:13px;color:#c3cec6;margin-bottom:12px;">Şu an <b style="color:#7CE7A6;">%10</b> bonus aktif · %15'e <b>₺1.600</b> kaldı</div>
+                        <div style="height:8px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;"><div style="width:82%;height:100%;background:linear-gradient(90deg,#7CE7A6,#e6c583);border-radius:8px;"></div></div>
+                        <div style="display:flex;justify-content:space-between;font-size:10.5px;color:#6b776d;margin-top:7px;"><span>%5 · ₺5K</span><span>%10 · ₺10K</span><span>%15 · ₺20K</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_m_wallet }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="display:flex;align-items:center;gap:14px;padding:6px 24px 12px;">
+                      <button onClick="{{ go_m_home }}" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#eef2ec;font-size:20px;cursor:pointer;">‹</button>
+                      <div style="flex:1;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Cüzdan</div></div>
+                    </div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:13px;">
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:18px;display:flex;align-items:center;justify-content:space-between;">
+                        <div><div style="font-size:12px;color:#8a978c;">Kullanılabilir kredi</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:26px;">₺18.400</div></div>
+                        <button style="padding:12px 16px;border-radius:12px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:13px;cursor:pointer;">Kredi Yükle</button>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:12px;">SON HAREKETLER</div>
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                          <sc-for list="{{ wallet }}" as="w" hint-placeholder-count="4">
+                            <div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13.5px;font-weight:500;">{{ w.t }}</div><div style="font-size:11px;color:#6b776d;">{{ w.d }}</div></div><span style="{{ w.amtStyle }}">{{ w.amt }}</span></div>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div style="display:flex;gap:11px;">
+                        <div style="flex:1;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:15px;"><div style="font-size:22px;margin-bottom:8px;">❄️</div><div style="font-weight:600;font-size:13.5px;">Üyelik Dondur</div><div style="font-size:11px;color:#8a978c;">2 ay hakkın var · tek seferlik</div></div>
+                        <div style="flex:1;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:15px;"><div style="font-size:22px;margin-bottom:8px;">📄</div><div style="font-weight:600;font-size:13.5px;">İptal & İade</div><div style="font-size:11px;color:#8a978c;">Sağlık raporu ile iade</div></div>
+                      </div>
+                      <div style="font-size:11px;color:#6b776d;text-align:center;line-height:1.5;">Signature üyeliğin 12 Ağu'da yenilenir. Paket bitince rezervasyon yapılamaz.</div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_t_home }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="padding:12px 24px 8px;display:flex;align-items:center;justify-content:space-between;">
+                      <div><div style="font-size:12.5px;color:#8a978c;">Eğitmen paneli</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:20px;">Elif Kaya</div></div>
+                      <span style="font-size:11px;color:#7CE7A6;background:rgba(124,231,166,.12);padding:5px 11px;border-radius:8px;">● Profil yayında</span>
+                    </div>
+                    <div style="padding:8px 24px 20px;display:flex;flex-direction:column;gap:13px;">
+                      <div style="display:flex;gap:11px;">
+                        <div style="flex:1;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:15px;"><div style="font-size:11px;color:#8a978c;">Bu hafta net</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:21px;color:#7CE7A6;">₺2.940</div><div style="font-size:10.5px;color:#6b776d;">7 seans · %70 pay</div></div>
+                        <div style="flex:1;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:15px;"><div style="font-size:11px;color:#8a978c;">Değerlendirme</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:21px;color:#e6c583;">★ 4.9</div><div style="font-size:10.5px;color:#6b776d;">128 üye puanı</div></div>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:13px;">YENİ TALEPLER · 3</div>
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                          <sc-for list="{{ requests }}" as="r" hint-placeholder-count="3">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                              <span style="width:42px;height:42px;border-radius:12px;background:#1c241f;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;color:#7CE7A6;font-size:13px;">{{ r.init }}</span>
+                              <div style="flex:1;"><div style="font-weight:600;font-size:13.5px;">{{ r.name }}</div><div style="font-size:11px;color:#8a978c;">{{ r.when }} · {{ r.price }}</div></div>
+                              <div style="display:flex;gap:7px;"><span style="width:34px;height:34px;border-radius:10px;background:#7CE7A6;color:#062718;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer;">✓</span><span style="width:34px;height:34px;border-radius:10px;border:1px solid rgba(240,128,110,.4);color:#f0806e;display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</span></div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_t_calendar }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="padding:12px 24px 12px;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:19px;">Müsaitlik Takvimi</div><div style="font-size:11.5px;color:#8a978c;">Uygun saatlerini işaretle</div></div>
+                    <div style="padding:0 24px;"><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;"><sc-for list="{{ days }}" as="d" hint-placeholder-count="6"><div style="{{ d.styleT }}"><span style="font-size:10.5px;">{{ d.dow }}</span><span style="font-family:'Space Grotesk';font-weight:700;font-size:16px;">{{ d.num }}</span></div></sc-for></div></div>
+                    <div style="padding:14px 24px 8px;"><div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:12px;">SALI · SLOTLAR</div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;"><sc-for list="{{ availSlots }}" as="s" hint-placeholder-count="9"><div style="{{ s.style }}">{{ s.time }}</div></sc-for></div>
+                    </div>
+                    <div style="padding:16px 24px;"><label style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:8px;display:block;">Seans ücretin</label><div style="display:flex;align-items:center;gap:10px;background:#0f1512;border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:14px 15px;"><span style="font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#7CE7A6;">₺600</span><span style="font-size:11.5px;color:#6b776d;">/ seans · platform %30 komisyon uygular</span></div></div>
+                    <div style="margin-top:auto;padding:14px 24px 24px;"><button style="width:100%;padding:16px;border-radius:15px;border:none;background:#7CE7A6;color:#062718;font-family:'Space Grotesk';font-weight:700;font-size:15px;cursor:pointer;">Takvimi Kaydet</button></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_t_earnings }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="padding:12px 24px 12px;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:19px;">Kazanç</div></div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:13px;">
+                      <div style="background:linear-gradient(150deg,#173226,#101711);border:1px solid rgba(124,231,166,.22);border-radius:20px;padding:19px;"><div style="font-size:12px;color:#95a399;">Bu ay net kazanç</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:32px;">₺11.760</div><div style="font-size:11.5px;color:#7CE7A6;margin-top:4px;">28 seans tamamlandı</div></div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:12px;">PAY DAĞILIMI</div>
+                        <div style="height:14px;border-radius:8px;overflow:hidden;display:flex;"><div style="width:70%;background:#7CE7A6;"></div><div style="width:30%;background:#2a3a30;"></div></div>
+                        <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:10px;"><span style="color:#7CE7A6;">● Sen %70</span><span style="color:#8a978c;">● Platform %30</span></div>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;">
+                        <div style="font-size:12px;font-weight:600;color:#8a978c;margin-bottom:12px;">ÖDEME GEÇMİŞİ</div>
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                          <sc-for list="{{ payouts }}" as="p" hint-placeholder-count="3"><div style="display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13.5px;font-weight:500;">{{ p.t }}</div><div style="font-size:11px;color:#6b776d;">{{ p.d }}</div></div><span style="font-family:'Space Grotesk';font-weight:700;font-size:14px;color:#7CE7A6;">{{ p.amt }}</span></div></sc-for>
+                        </div>
+                        <div style="font-size:11px;color:#6b776d;margin-top:12px;">Ödemeler İyzico üzerinden hesabına aktarılır.</div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_t_profile }}">
+                  <div style="min-height:770px;display:flex;flex-direction:column;">
+                    <div style="padding:12px 24px 12px;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:19px;">Profil</div></div>
+                    <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:14px;">
+                      <div style="display:flex;align-items:center;gap:15px;"><span style="width:70px;height:70px;border-radius:20px;background:linear-gradient(150deg,#2a3a30,#18211c);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:24px;color:#7CE7A6;">EK</span><div><div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;">Elif Kaya</div><div style="font-size:12.5px;color:#8a978c;">Reformer · Postür düzeltme</div><div style="font-size:11.5px;color:#e6c583;margin-top:3px;">★ 4.9 · 128 puan</div></div></div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:15px;font-size:13px;color:#c3cec6;line-height:1.55;">8 yıllık reformer deneyimi. Postür bozuklukları ve rehab odaklı bireysel seanslar.</div>
+                      <div style="display:flex;flex-direction:column;gap:10px;">
+                        <sc-for list="{{ profileItems }}" as="pi" hint-placeholder-count="4"><div style="display:flex;align-items:center;justify-content:space-between;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px 15px;"><span style="font-size:13px;color:#c3cec6;">{{ pi.label }}</span><span style="{{ pi.badgeStyle }}">{{ pi.badge }}</span></div></sc-for>
+                      </div>
+                      <button style="width:100%;padding:15px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#eef2ec;font-family:'Space Grotesk';font-weight:600;font-size:14px;cursor:pointer;">Profili Düzenle</button>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <!--PHONE_SCREENS_END-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAdmin }}">
+        <div style="width:min(1120px,90vw);">
+          <div style="border-radius:16px;overflow:hidden;background:#0d130f;border:1px solid rgba(255,255,255,.09);box-shadow:0 46px 100px -34px rgba(0,0,0,.85);">
+            <div style="height:44px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#11181300;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);">
+              <span style="width:12px;height:12px;border-radius:50%;background:#f0806e;"></span>
+              <span style="width:12px;height:12px;border-radius:50%;background:#e6c583;"></span>
+              <span style="width:12px;height:12px;border-radius:50%;background:#7CE7A6;"></span>
+              <span style="flex:1;text-align:center;font-size:12px;color:#7c8a80;font-family:'Space Grotesk';">tam30.app/isletme</span>
+            </div>
+            <div style="display:flex;height:648px;">
+              <div style="width:210px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.06);padding:18px 12px;display:flex;flex-direction:column;gap:3px;background:rgba(8,14,10,.4);">
+                <div style="padding:0 10px 14px;display:flex;align-items:baseline;gap:7px;"><span style="font-family:'Space Grotesk';font-weight:700;font-size:17px;">TAM30</span><span style="font-size:8.5px;font-weight:700;letter-spacing:.28em;color:#7CE7A6;">ADMIN</span></div>
+                <sc-for list="{{ nav }}" as="item" hint-placeholder-count="4">
+                  <div style="{{ item.rowStyle }}" onClick="{{ item.go }}"><span style="{{ item.numStyle }}">{{ item.num }}</span><span style="{{ item.labelStyle }}">{{ item.label }}</span></div>
+                </sc-for>
+                <div style="margin-top:auto;padding:12px 10px;display:flex;align-items:center;gap:9px;border-top:1px solid rgba(255,255,255,.06);"><span style="width:30px;height:30px;border-radius:9px;background:#1c241f;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Space Grotesk';font-weight:700;color:#7CE7A6;">İY</span><div><div style="font-size:12px;font-weight:600;">İşletmeci</div><div style="font-size:10px;color:#6b776d;">Yetkili erişim</div></div></div>
+              </div>
+              <div ref="{{ setDScroll }}" style="flex:1;overflow-y:auto;background:#0d130f;">
+                <sc-if value="{{ is_a_dashboard }}">
+                  <div style="padding:24px 28px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                      <div><div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;">İşletme Paneli</div><div style="font-size:12.5px;color:#8a978c;">Canlı · Salı 15 Tem 2026, 18:42</div></div>
+                      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#7CE7A6;background:rgba(124,231,166,.1);border:1px solid rgba(124,231,166,.25);padding:7px 13px;border-radius:10px;"><span style="width:8px;height:8px;border-radius:50%;background:#7CE7A6;"></span> Sistem çevrimiçi</div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;">
+                      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="5">
+                        <div style="{{ k.cardStyle }}"><div style="font-size:11.5px;color:#8a978c;">{{ k.label }}</div><div style="{{ k.valStyle }}">{{ k.val }}</div><div style="font-size:10.5px;color:#6b776d;">{{ k.sub }}</div></div>
+                      </sc-for>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><span style="font-size:13px;font-weight:600;">Canlı stüdyo durumu · 18 Reformer</span><span style="font-size:11px;color:#8a978c;">14 aktif · 2 boş · 2 temizlik</span></div>
+                        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">
+                          <sc-for list="{{ machines }}" as="m" hint-placeholder-count="18"><div style="{{ m.style }}">{{ m.no }}</div></sc-for>
+                        </div>
+                        <div style="display:flex;gap:16px;margin-top:14px;font-size:11px;color:#8a978c;"><span>■ <span style="color:#7CE7A6;">Aktif</span></span><span>■ Boş</span><span>■ <span style="color:#e6c583;">Temizlik</span></span></div>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;">
+                        <div style="font-size:13px;font-weight:600;margin-bottom:16px;">Haftalık gelir</div>
+                        <div style="display:flex;align-items:flex-end;gap:10px;height:120px;">
+                          <sc-for list="{{ revenue }}" as="rv" hint-placeholder-count="7"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end;height:100%;"><div style="width:100%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#7CE7A6,#3aa46b);height:{{ rv.h }};"></div><span style="font-size:10px;color:#6b776d;">{{ rv.d }}</span></div></sc-for>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="background:rgba(240,128,110,.06);border:1px solid rgba(240,128,110,.22);border-radius:16px;padding:16px 18px;margin-top:16px;display:flex;align-items:center;gap:14px;">
+                      <span style="font-size:22px;">⚠️</span><div style="flex:1;"><div style="font-weight:600;font-size:13.5px;color:#f0806e;">3 açık ihlal inceleniyor</div><div style="font-size:12px;color:#95a399;">1 tanımsız kişi (kalıcı iptal) · güvenlik şirketine bildirim gönderildi</div></div>
+                      <button onClick="{{ go_a_violations }}" style="padding:10px 15px;border-radius:11px;border:1px solid rgba(240,128,110,.4);background:transparent;color:#f0806e;font-family:'Space Grotesk';font-weight:600;font-size:12.5px;cursor:pointer;">İncele</button>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_a_members }}">
+                  <div style="padding:24px 28px;">
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;margin-bottom:20px;">Üyeler & Eğitmen Onayı</div>
+                    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;">
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;">
+                        <div style="display:grid;grid-template-columns:1.3fr 1fr .9fr .8fr;padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:.05em;color:#6b776d;border-bottom:1px solid rgba(255,255,255,.06);"><span>ÜYE</span><span>PAKET</span><span>BAKİYE</span><span>DURUM</span></div>
+                        <sc-for list="{{ membersRows }}" as="m" hint-placeholder-count="6">
+                          <div style="display:grid;grid-template-columns:1.3fr 1fr .9fr .8fr;padding:13px 18px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);align-items:center;"><span style="font-weight:500;">{{ m.name }}</span><span style="color:#95a399;">{{ m.pkg }}</span><span style="font-family:'Space Grotesk';">{{ m.bal }}</span><span style="{{ m.statusStyle }}">{{ m.status }}</span></div>
+                        </sc-for>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;">
+                        <div style="font-size:13px;font-weight:600;margin-bottom:16px;">Eğitmen onay kuyruğu · 2</div>
+                        <div style="display:flex;flex-direction:column;gap:14px;">
+                          <sc-for list="{{ approvals }}" as="a" hint-placeholder-count="2">
+                            <div style="border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:14px;">
+                              <div style="display:flex;align-items:center;gap:11px;margin-bottom:11px;"><span style="width:38px;height:38px;border-radius:11px;background:#1c241f;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;color:#7CE7A6;font-size:12px;">{{ a.init }}</span><div><div style="font-weight:600;font-size:13.5px;">{{ a.name }}</div><div style="font-size:11px;color:#8a978c;">{{ a.spec }}</div></div></div>
+                              <div style="font-size:11.5px;color:#7CE7A6;margin-bottom:11px;">✓ {{ a.doc }}</div>
+                              <div style="display:flex;gap:8px;"><button style="flex:1;padding:9px;border-radius:10px;border:none;background:#7CE7A6;color:#062718;font-weight:700;font-size:12px;cursor:pointer;">Onayla</button><button style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(240,128,110,.4);background:transparent;color:#f0806e;font-weight:600;font-size:12px;cursor:pointer;">Reddet</button></div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_a_violations }}">
+                  <div style="padding:24px 28px;">
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;margin-bottom:6px;">İhlaller & Otomatik Yaptırımlar</div>
+                    <div style="font-size:12.5px;color:#8a978c;margin-bottom:20px;">Kurallar sistem tarafından otomatik uygulanır — manuel müdahale gerekmez.</div>
+                    <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;">
+                      <div style="display:grid;grid-template-columns:1.1fr 1.6fr .9fr .9fr;padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:.05em;color:#6b776d;border-bottom:1px solid rgba(255,255,255,.06);"><span>İHLAL</span><span>OTOMATİK YAPTIRIM</span><span>ÜYE</span><span>ZAMAN</span></div>
+                      <sc-for list="{{ violations }}" as="v" hint-placeholder-count="3">
+                        <div style="display:grid;grid-template-columns:1.1fr 1.6fr .9fr .9fr;padding:15px 18px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);align-items:center;"><span style="{{ v.tagStyle }}">{{ v.tip }}</span><span style="color:#c3cec6;">{{ v.rule }}</span><span style="color:#95a399;">{{ v.who }}</span><span style="color:#6b776d;font-size:12px;">{{ v.when }}</span></div>
+                      </sc-for>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
+                      <div style="background:rgba(230,197,131,.06);border:1px solid rgba(230,197,131,.22);border-radius:14px;padding:15px;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:15px;color:#e6c583;">Ücret × 1,5</div><div style="font-size:12px;color:#95a399;margin-top:4px;">1 saati geçme + güvenlik bildirimi</div></div>
+                      <div style="background:rgba(240,128,110,.06);border:1px solid rgba(240,128,110,.22);border-radius:14px;padding:15px;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:15px;color:#f0806e;">Ücret × 2 + iptal</div><div style="font-size:12px;color:#95a399;margin-top:4px;">Tanımsız kişi sokma · kalıcı iptal</div></div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:15px;"><div style="font-family:'Space Grotesk';font-weight:700;font-size:15px;">Geçici askı</div><div style="font-size:12px;color:#95a399;margin-top:4px;">Rezervasyon dışı giriş (3+ deneme)</div></div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is_a_hours }}">
+                  <div style="padding:24px 28px;">
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;margin-bottom:20px;">Erişim & Çalışma Saatleri</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;">
+                        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">Erişim penceresi</div>
+                        <sc-for list="{{ hours }}" as="h" hint-placeholder-count="4"><div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:12px;background:#0f1512;"><span style="font-family:'Space Grotesk';font-weight:600;font-size:13px;">{{ h.time }}</span><span style="{{ h.style }}">{{ h.state }}</span></div></sc-for>
+                      </div>
+                      <div style="background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;">
+                        <div style="font-size:13px;font-weight:600;margin-bottom:14px;">Giriş kuralları</div>
+                        <div style="display:flex;flex-direction:column;gap:13px;">
+                          <sc-for list="{{ rules }}" as="r" hint-placeholder-count="4"><div style="display:flex;gap:11px;align-items:flex-start;"><span style="color:#7CE7A6;margin-top:1px;">›</span><span style="font-size:13px;color:#c3cec6;line-height:1.5;">{{ r }}</span></div></sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <!--DESKTOP_SCREENS_END-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860},&quot;startAt&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Onboarding&quot;,&quot;Üye Ana Ekran&quot;,&quot;Rezervasyon&quot;,&quot;Eğitmen&quot;,&quot;İşletmeci&quot;],&quot;default&quot;:&quot;Onboarding&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototip&quot;}}">
+class Component extends DCLogic {
+  state = { role:'member', screen:'m_login', pkg:'signature', mode:'solo', slot:'18:30', addTrainer:true, eligible:true };
+
+  screens = {
+    member:[['m_login','Giriş'],['m_signup','Kayıt'],['m_otp','Doğrulama'],['m_health','Sağlık Formu'],['m_eligibility','Uygunluk'],['m_consent','Sözleşme & KVKK'],['m_package','Paket Seçimi'],['m_payment','Ödeme'],['m_welcome','Üyelik Aktif'],['m_home','Ana Ekran'],['m_reserve','Rezervasyon'],['m_trainerpick','Eğitmen Seç'],['m_reserved','Onay'],['m_qr','QR Giriş'],['m_session','Aktif Seans'],['m_rewards','Ödüller'],['m_wallet','Cüzdan']],
+    trainer:[['t_home','Talepler'],['t_calendar','Takvim'],['t_earnings','Kazanç'],['t_profile','Profil']],
+    admin:[['a_dashboard','Panel'],['a_members','Üyeler & Onay'],['a_violations','İhlaller'],['a_hours','Erişim & Saatler']]
+  };
+
+  componentDidMount(){
+    const map={'Onboarding':['member','m_login'],'Üye Ana Ekran':['member','m_home'],'Rezervasyon':['member','m_reserve'],'Eğitmen':['trainer','t_home'],'İşletmeci':['admin','a_dashboard']};
+    const s=this.props.startAt; if(s&&map[s]) this.setState({role:map[s][0],screen:map[s][1]});
+  }
+  go(id){ this.setState({screen:id}); if(this.scroll)this.scroll.scrollTop=0; if(this.dscroll)this.dscroll.scrollTop=0; }
+  setRole(r){ this.setState({role:r,screen:this.screens[r][0][0]}); if(this.scroll)this.scroll.scrollTop=0; if(this.dscroll)this.dscroll.scrollTop=0; }
+
+  buildQR(){
+    const n=15,arr=[];
+    const inF=(r,c)=>{const z=[[0,0],[0,n-7],[n-7,0]];for(const zz of z){if(r>=zz[0]&&r<zz[0]+7&&c>=zz[1]&&c<zz[1]+7)return zz;}return null;};
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++){let f=inF(r,c),fill;if(f){const rr=r-f[0],cc=c-f[1];fill=(rr===0||rr===6||cc===0||cc===6)||(rr>=2&&rr<=4&&cc>=2&&cc<=4);}else{fill=((r*29+c*53+((r*c)%7))%3)===0;}arr.push({style:'width:100%;aspect-ratio:1;border-radius:1px;background:'+(fill?'#0a0d0b':'transparent')+';'});}
+    return arr;
+  }
+
+  renderVals(){
+    const st=this.state, role=st.role, screen=st.screen;
+    const list=this.screens[role];
+    const idx=list.findIndex(x=>x[0]===screen);
+    const nav=list.map((x,i)=>{const active=x[0]===screen;return {id:x[0],label:x[1],num:String(i+1).padStart(2,'0'),go:()=>this.go(x[0]),rowStyle:'display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:12px;cursor:pointer;transition:.18s;background:'+(active?'rgba(124,231,166,0.10)':'transparent')+';border:1px solid '+(active?'rgba(124,231,166,0.32)':'transparent')+';',numStyle:"font-family:'Space Grotesk';font-size:11.5px;font-weight:600;color:"+(active?'#7CE7A6':'#59645b')+';min-width:18px;',labelStyle:'font-size:13px;font-weight:'+(active?600:500)+';color:'+(active?'#eef2ec':'#95a399')+';'};});
+
+    const roleTabs=[['member','Üye'],['trainer','Eğitmen'],['admin','İşletmeci']].map(x=>{const active=role===x[0];return{key:x[0],label:x[1],go:()=>this.setRole(x[0]),style:"flex:1;text-align:center;padding:9px 4px;border-radius:10px;cursor:pointer;font-size:12.5px;font-weight:600;font-family:'Space Grotesk';transition:.18s;background:"+(active?'#7CE7A6':'transparent')+';color:'+(active?'#062718':'#95a399')+';'};});
+
+    const flags={}; Object.values(this.screens).flat().forEach(x=>flags['is_'+x[0]]=(x[0]===screen));
+    const gotos={}; Object.values(this.screens).flat().forEach(x=>gotos['go_'+x[0]]=()=>this.go(x[0]));
+
+    // health form
+    const healthItems=[
+      ['Yaş 18–70 aralığında','Uygun',true],
+      ['En az 1 yıl reformer deneyimi','Beyan edildi',true],
+      ['Hamilelik durumu','Yok',true],
+      ['Tanı konulmuş kalp rahatsızlığı',st.eligible?'Yok':'Var',st.eligible],
+      ['Egzersizi kısıtlayan aktif hastalık','Yok',true]
+    ].map(h=>({label:h[0],badge:h[2]?h[1]:h[1],style:'display:flex;align-items:center;justify-content:space-between;background:#151b17;border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px 15px;',badgeStyle:'font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:7px;background:'+(h[2]?'rgba(124,231,166,.12)':'rgba(240,128,110,.14)')+';color:'+(h[2]?'#7CE7A6':'#f0806e')+';'}));
+
+    const eligTabs=[['ok','Onay',true],['no','Red',false]].map(t=>{const active=st.eligible===t[2];return{label:t[1],go:()=>this.setState({eligible:t[2]}),style:"flex:1;text-align:center;padding:11px 4px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Space Grotesk';background:"+(active?(t[2]?'#7CE7A6':'#f0806e'):'transparent')+';color:'+(active?'#0a0d0b':'#95a399')+';'};});
+
+    const consents=['Üyelik sözleşmesini okudum ve kabul ediyorum','KVKK aydınlatma metnini onaylıyorum','Kamera kaydı ve sağlık verisi işlenmesine onay veriyorum'];
+    const eligOk=['Yaş aralığı uygun (18–70)','Reformer deneyimi ≥ 1 yıl','Sağlık beyanı temiz','Sözleşme koşulları kabul edilebilir'];
+
+    // packages
+    const P=[
+      {key:'start',name:'Tam30 Start',tag:'Başlangıç',sessions:'4 seans',price:'₺4.900',dot:'#8FA47E',feats:['Self-servis erişim','Standart rezervasyon']},
+      {key:'balance',name:'Tam30 Balance',tag:'Denge',sessions:'8 seans',price:'₺8.900',dot:'#7CE7A6',feats:['Beslenme önerileri','Wellness içerikleri']},
+      {key:'active',name:'Tam30 Active',tag:'Aktif',sessions:'12 seans',price:'₺12.900',dot:'#B6E870',feats:['Video + beslenme erişimi','Öncelikli rezervasyon']},
+      {key:'signature',name:'Tam30 Signature',tag:'Sınırsız',sessions:'Sınırsız giriş',price:'₺24.900',dot:'#E6C583',feats:['Öncelikli rezervasyon','Kişisel wellness planı','AI öneriler (yakında)']},
+      {key:'corporate',name:'Tam30 Corporate',tag:'Kurumsal',sessions:'Şirket anlaşması',price:'Teklif',dot:'#9aa89c',feats:['HR raporları','Çalışan yönetimi']}
+    ];
+    const packages=P.map(p=>{const sel=st.pkg===p.key;return Object.assign({},p,{go:()=>this.setState({pkg:p.key}),cardStyle:'background:'+(sel?'rgba(124,231,166,0.06)':'#151b17')+';border:1px solid '+(sel?'#7CE7A6':'rgba(255,255,255,.08)')+';border-radius:18px;padding:16px;cursor:pointer;transition:.18s;',checkStyle:'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:11px;margin-top:4px;background:'+(sel?'#7CE7A6':'transparent')+';color:#062718;'});});
+    const selP=P.find(p=>p.key===st.pkg)||P[3];
+
+    const modeTabs=[['solo','Bireysel'],['duo','Eğitmenli']].map(m=>{const active=st.mode===m[0];return{label:m[1],go:()=>this.setState({mode:m[0]}),style:"flex:1;text-align:center;padding:10px 4px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Space Grotesk';background:"+(active?'#7CE7A6':'transparent')+';color:'+(active?'#062718':'#95a399')+';'};});
+
+    const qr=this.buildQR();
+
+    // reservation days
+    const dayData=[['Pzt','14'],['Sal','15'],['Çrş','16'],['Prş','17'],['Cum','18'],['Cmt','19']];
+    const days=dayData.map((d,i)=>{const active=i===1;return{dow:d[0],num:d[1],style:'flex-shrink:0;width:52px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 0;border-radius:14px;cursor:pointer;background:'+(active?'#7CE7A6':'#151b17')+';color:'+(active?'#062718':'#95a399')+';border:1px solid '+(active?'#7CE7A6':'rgba(255,255,255,.07)')+';',styleT:'flex-shrink:0;width:52px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 0;border-radius:14px;cursor:pointer;background:'+(active?'rgba(124,231,166,.12)':'#151b17')+';color:'+(active?'#7CE7A6':'#95a399')+';border:1px solid '+(active?'rgba(124,231,166,.35)':'rgba(255,255,255,.07)')+';'};});
+
+    const slotData=[['07:00','3 yer',false],['08:30','Dolu',true],['10:00','5 yer',false],['12:00','2 yer',false],['17:00','1 yer',false],['18:30','4 yer',false]];
+    const slots=slotData.map(s=>{const sel=st.slot===s[0]&&!s[2];return{time:s[0],cap:s[1],go:()=>{if(!s[2])this.setState({slot:s[0]});},capColor:'color:'+(s[2]?'#f0806e':'#7CE7A6')+';',style:'padding:15px;border-radius:15px;cursor:'+(s[2]?'not-allowed':'pointer')+';text-align:center;background:'+(s[2]?'rgba(240,128,110,.05)':sel?'rgba(124,231,166,.1)':'#151b17')+';border:1px solid '+(s[2]?'rgba(240,128,110,.2)':sel?'#7CE7A6':'rgba(255,255,255,.08)')+';opacity:'+(s[2]?'.6':'1')+';'};});
+
+    const at=st.addTrainer;
+    const switchStyle='width:46px;height:27px;border-radius:16px;background:'+(at?'#7CE7A6':'rgba(255,255,255,.15)')+';position:relative;transition:.2s;display:inline-block;flex-shrink:0;';
+    const switchKnob='position:absolute;top:3px;left:'+(at?'22px':'3px')+';width:21px;height:21px;border-radius:50%;background:#fff;transition:.2s;';
+
+    const trainers=[
+      {init:'EK',name:'Elif Kaya',spec:'Reformer · Postür',price:'₺600',rating:'4.9',avail:'18:30, 20:00',key:'ek'},
+      {init:'MA',name:'Mert Aydın',spec:'Rehab · Core',price:'₺550',rating:'4.8',avail:'17:00, 19:00',key:'ma'},
+      {init:'SY',name:'Selin Yıldız',spec:'Mobilite · Denge',price:'₺650',rating:'5.0',avail:'12:00, 18:30',key:'sy'}
+    ].map((t,i)=>{const sel=i===0;return Object.assign({},t,{go:()=>{},cardStyle:'background:'+(sel?'rgba(124,231,166,.06)':'#151b17')+';border:1px solid '+(sel?'#7CE7A6':'rgba(255,255,255,.08)')+';border-radius:18px;padding:15px;cursor:pointer;'});});
+
+    const streak=[1,1,1,1,0,0,0].map(f=>({style:'width:22px;height:22px;border-radius:7px;background:'+(f?'#e6c583':'rgba(255,255,255,.08)')+';'}));
+    const pointsList=[['Her stüdyo seansı','Süreyle orantılı'],['Haftalık streak','Artan bonus'],['Uzman / diyetisyen seansı','+ ekstra puan'],['Profil & hedef tamamlama','+ 50 puan']].map(p=>({act:p[0],pts:p[1]}));
+    const wallet=[['Kredi yükleme','12 Tem','+₺10.000',true],['Reformer seansı','10 Tem','−₺450',false],['Eğitmen · Elif K.','8 Tem','−₺600',false],['Streak bonusu','7 Tem','+₺250',true]].map(w=>({t:w[0],d:w[1],amt:w[2],amtStyle:'font-family:\'Space Grotesk\';font-weight:700;font-size:14px;color:'+(w[3]?'#7CE7A6':'#c3cec6')+';'}));
+    const requests=[{init:'DA',name:'Deniz Arslan',when:'Bugün 18:30',price:'₺600'},{init:'ET',name:'Ece Tunç',when:'Yarın 10:00',price:'₺600'},{init:'KV',name:'Kaan Var',when:'Çrş 20:00',price:'₺600'}];
+    const availSlots=['07:00','08:30','10:00','12:00','17:00','18:30','19:00','20:00','21:00'].map((t,i)=>{const on=[1,3,4,5,7].indexOf(i)>=0;return{time:t,style:'padding:12px 4px;text-align:center;border-radius:11px;font-family:\'Space Grotesk\';font-weight:600;font-size:13px;cursor:pointer;background:'+(on?'rgba(124,231,166,.12)':'#151b17')+';border:1px solid '+(on?'#7CE7A6':'rgba(255,255,255,.08)')+';color:'+(on?'#7CE7A6':'#7c8a80')+';'};});
+    const payouts=[['Haftalık ödeme','12 Tem','₺2.940'],['Haftalık ödeme','5 Tem','₺3.150'],['Haftalık ödeme','28 Haz','₺2.670']].map(p=>({t:p[0],d:p[1],amt:p[2]}));
+    const profileItems=[['Pilates sertifikası','Yüklendi',true],['Platform sözleşmesi','İmzalandı',true],['Aylık üyelik ücreti','Ödendi',true],['Yetkili onayı','Onaylı',true]].map(p=>({label:p[0],badge:p[1],badgeStyle:'font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:7px;background:rgba(124,231,166,.12);color:#7CE7A6;'}));
+
+    return Object.assign({}, flags, gotos, {
+      days, slots, switchStyle, switchKnob, toggleTrainer:()=>this.setState({addTrainer:!st.addTrainer}),
+      reserveNext: st.addTrainer? (()=>this.go('m_trainerpick')) : (()=>this.go('m_reserved')),
+      reserveCta: st.addTrainer? 'Devam · Eğitmen Seç' : 'Rezervasyonu Onayla',
+      trainers, streak, pointsList, wallet, requests, availSlots, payouts, profileItems,
+      kpis:[['Aktif üye','842','+18 bu hafta',false],['Bugünkü seans','126','%78 doluluk',false],['Anlık doluluk','14/18','reformer',false],['Aylık gelir','₺1,24M','+%12',false],['Açık ihlal','3','inceleniyor',true]].map(k=>({label:k[0],val:k[1],sub:k[2],cardStyle:'background:'+(k[3]?'rgba(240,128,110,.06)':'#151b17')+';border:1px solid '+(k[3]?'rgba(240,128,110,.22)':'rgba(255,255,255,.07)')+';border-radius:14px;padding:15px;',valStyle:"font-family:'Space Grotesk';font-weight:700;font-size:24px;margin:4px 0 2px;color:"+(k[3]?'#f0806e':'#eef2ec')+';'})),
+      machines:Array.from({length:18},(_,i)=>{const s=[7,12].indexOf(i)>=0?'free':[3,15].indexOf(i)>=0?'clean':'active';const c=s==='active'?['rgba(124,231,166,.14)','#7CE7A6','rgba(124,231,166,.3)']:s==='clean'?['rgba(230,197,131,.12)','#e6c583','rgba(230,197,131,.3)']:['#0f1512','#59645b','rgba(255,255,255,.08)'];return{no:'#'+(i+1),style:'aspect-ratio:1.4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:\'Space Grotesk\';font-weight:600;font-size:12px;background:'+c[0]+';color:'+c[1]+';border:1px solid '+c[2]+';'};}),
+      revenue:[['Pzt','52%'],['Sal','70%'],['Çrş','61%'],['Prş','84%'],['Cum','95%'],['Cmt','78%'],['Paz','44%']].map(r=>({d:r[0],h:r[1]})),
+      membersRows:[['Deniz Arslan','Signature','₺18.400','Aktif',true],['Ece Tunç','Active','₺3.200','Aktif',true],['Kaan Var','Balance','₺850','Dondu',false],['Sıla Demir','Signature','₺24.100','Aktif',true],['Ali Öz','Start','₺0','Askıda',false],['Naz Kılıç','Corporate','₺41.000','Aktif',true]].map(m=>({name:m[0],pkg:m[1],bal:m[2],status:m[3],statusStyle:'font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:7px;display:inline-block;background:'+(m[4]?'rgba(124,231,166,.12)':'rgba(240,128,110,.12)')+';color:'+(m[4]?'#7CE7A6':'#f0806e')+';'})),
+      approvals:[{init:'AD',name:'Ayşe Demir',spec:'Reformer eğitmeni',doc:'Sertifika yüklendi'},{init:'BŞ',name:'Burak Şen',spec:'Rehab pilates',doc:'Sözleşme imzalandı'}],
+      violations:[['1 saati geçme','Ücret × 1,5 kesildi + güvenlik bildirimi','Üye #412','Bugün 19:20','#e6c583'],['Tanımsız kişi sokma','Ücret × 2 + üyelik kalıcı iptal','Üye #388','Dün 21:05','#f0806e'],['Rezervasyon dışı giriş (3+)','Hesap geçici askıya alındı','Üye #501','Dün 08:12','#95a399']].map(v=>({tip:v[0],rule:v[1],who:v[2],when:v[3],tagStyle:'font-weight:600;color:'+v[4]+';'})),
+      hours:[['06:00 – 00:00','Giriş açık','ok'],['00:00 – 06:00','Kapalı','no'],['Yetkili QR','Her saat geçerli','ok'],['Resmi tatiller','Kısıtlanabilir','warn']].map(h=>({time:h[0],state:h[1],style:'font-size:12px;font-weight:600;padding:3px 9px;border-radius:7px;background:'+(h[2]==='ok'?'rgba(124,231,166,.12)':h[2]==='no'?'rgba(240,128,110,.12)':'rgba(230,197,131,.12)')+';color:'+(h[2]==='ok'?'#7CE7A6':h[2]==='no'?'#f0806e':'#e6c583')+';'})),
+      rules:['Rezervasyon saatinden itibaren giriş yapılabilir.','20 dakika geçmişse QR kodu geçersiz olur.','Rezervasyon dışı saatte QR kapıyı açmaz; deneme kaydedilir.','3 başarısız deneme: hesap geçici askıya alınır.'],
+      role, roleLabel: role==='member'?'Üye':role==='trainer'?'Eğitmen':'İşletmeci',
+      isMember: role==='member', isTrainer: role==='trainer', isAdmin: role==='admin', isPhone: role!=='admin',
+      nav, roleTabs,
+      setScroll:(el)=>{this.scroll=el;}, setDScroll:(el)=>{this.dscroll=el;},
+      curLabel:(list[idx]||['',''])[1], curNum:String(idx+1).padStart(2,'0'), screenCount:list.length,
+      healthItems, eligTabs, eligible:st.eligible, notEligible:!st.eligible, consents, eligOk,
+      packages, modeTabs, selPkgName:selP.name, selPkgPrice:selP.price, qr
+    });
+  }
+}
+</script>
+</body>
+</html>
